@@ -54,10 +54,17 @@ jobs:
       - name: Initialize EB (if needed)
         run: |
           if [ ! -f ".elasticbeanstalk/config.yml" ]; then
-            eb init ${{ env.EB_APPLICATION_NAME }} \
-              --platform "Node.js 18 running on 64bit Amazon Linux 2" \
-              --region ${{ env.AWS_REGION }} \
-              --non-interactive
+            echo "Creating EB config directory..."
+            mkdir -p .elasticbeanstalk
+            cat > .elasticbeanstalk/config.yml << EOF
+          global:
+            application_name: ${{ env.EB_APPLICATION_NAME }}
+            default_platform: Node.js 18 running on 64bit Amazon Linux 2
+            default_region: ${{ env.AWS_REGION }}
+          EOF
+            echo "EB config created"
+          else
+            echo "EB already initialized"
           fi
 
       - name: Deploy to Elastic Beanstalk
