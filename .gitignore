@@ -13,6 +13,8 @@ build/
 .env
 .env.local
 .env.*.local
+# Allow example files
+!.env.example
 
 # IDE
 .vscode/
