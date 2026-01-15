@@ -65,7 +65,6 @@ src/
 - **[API_GUIDE.md](./API_GUIDE.md)** - API testing and usage
 - **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
 - **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to production (Vercel/Railway/Render)
-- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - How to add new features & modules
 - **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Code structure and organization
 - **[WORKFLOW.md](./WORKFLOW.md)** - Three-branch workflow (working → develop → main)
 
