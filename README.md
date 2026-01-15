@@ -1,0 +1,232 @@
+# Pharmacy POS Backend
+
+A production-ready, multi-tenant NestJS backend for Pharmacy Point of Sale (POS) system.
+
+## 🚀 Quick Start
+
+```bash
+# 1. Install MySQL (if not installed)
+brew install mysql
+brew services start mysql
+
+# 2. Create database
+mysql -u root -p
+CREATE DATABASE pharmacy_pos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+EXIT;
+
+# 3. Create tables
+mysql -u root -p pharmacy_pos < src/database/sql/schema.sql
+
+# 4. Configure environment
+cp .env.example .env
+# Edit .env with your MySQL credentials
+
+# 5. Install and start
+npm install
+npm run start:dev
+```
+
+**Access:**
+- API: http://localhost:3000/api/v1
+- Swagger: http://localhost:3000/api/docs
+
+## ✨ Features
+
+- ✅ Multi-tenant Architecture
+- ✅ JWT Authentication
+- ✅ Role-Based Access Control
+- ✅ MySQL Database (19 tables)
+- ✅ Push Notifications (Firebase)
+- ✅ Payment Integration (Stripe, PayFast)
+- ✅ Google OAuth
+- ✅ Swagger API Documentation
+- ✅ Request/Response Logging
+- ✅ Error Handling
+
+## 📁 Project Structure
+
+```
+src/
+├── common/          # Shared utilities, decorators, guards
+├── config/         # Configuration files
+├── database/       # TypeORM entities & SQL files
+│   ├── entities/   # Database entities
+│   └── sql/        # SQL schema files
+├── modules/        # Feature modules
+│   ├── auth/       # Authentication
+│   ├── notifications/  # Push notifications
+│   └── payments/   # Payment processing
+└── main.ts         # Application entry
+```
+
+## 📚 Documentation
+
+- **[SETUP.md](./SETUP.md)** - Complete setup guide
+- **[API_GUIDE.md](./API_GUIDE.md)** - API testing with Postman
+- **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
+- **[PHPMYADMIN_GUIDE.md](./PHPMYADMIN_GUIDE.md)** - phpMyAdmin setup & usage
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to production & make it live
+- **[FIREBASE_HOSTING_GUIDE.md](./FIREBASE_HOSTING_GUIDE.md)** - Firebase services & free hosting options
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - How to add new features & modules
+- **[INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)** - Firebase, Google OAuth, Payments setup
+
+## 🔧 Available Commands
+
+```bash
+npm run start:dev      # Development server
+npm run build          # Build for production
+npm run start:prod     # Production server
+npm run db:create      # Create database
+npm run lint           # Run linter
+npm run test           # Run tests
+```
+
+## 🔐 Authentication
+
+### Important: Register First!
+
+**You must register before you can login.**
+
+### Register Pharmacy
+```bash
+POST /api/v1/auth/register
+{
+  "pharmacyName": "My Pharmacy",
+  "email": "admin@pharmacy.com",
+  "password": "Password123!",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phoneNumber": "+1234567890",  # Optional
+  "address": "123 Main St"       # Optional
+}
+```
+
+**Response:** Returns `accessToken` and `refreshToken`
+
+### Login
+```bash
+POST /api/v1/auth/login
+{
+  "email": "admin@pharmacy.com",
+  "password": "Password123!"
+}
+```
+
+**Note:** Use the **exact same email and password** you used during registration.
+
+### Use JWT Token
+```
+Authorization: Bearer <your-access-token>
+```
+
+### Troubleshooting Login
+- ❌ "Invalid credentials" → Make sure you registered first
+- ❌ "User not found" → Register a pharmacy first
+- ✅ See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for more help
+
+## 🗄️ Database
+
+- **19 tables** created
+- **Multi-tenant** support
+- **SQL files**: `src/database/sql/schema.sql`
+- **Setup script**: `./scripts/setup-database-complete.sh`
+
+## 📖 API Documentation
+
+Interactive Swagger docs available at: http://localhost:3000/api/docs
+
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS
+- **Database**: MySQL
+- **ORM**: TypeORM
+- **Authentication**: JWT, Passport
+- **Documentation**: Swagger
+- **Validation**: class-validator
+
+## 🎯 What's Next?
+
+### ✅ You've Completed Setup
+1. ✅ MySQL installed and running
+2. ✅ Database created with 19 tables
+3. ✅ Backend server running on http://localhost:3000
+4. ✅ Swagger docs available at http://localhost:3000/api/docs
+5. ✅ User registered and can login
+
+### 🚀 Next Steps
+
+1. **Test the API**
+   - Use Swagger UI: http://localhost:3000/api/docs
+   - Register a pharmacy and login
+   - Test protected endpoints with JWT token
+
+2. **Setup Integrations** (Optional)
+   - Firebase for push notifications
+   - Google OAuth for social login
+   - Stripe/PayFast for payments
+   - See [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)
+
+3. **Deploy to Production**
+   - See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete guide
+   - Options: AWS, DigitalOcean, Heroku, Railway, etc.
+   - Link your domain
+   - Setup SSL/HTTPS
+
+4. **Add New Features**
+   - See [DEVELOPMENT.md](./DEVELOPMENT.md) for how to add modules
+   - Follow the module structure
+   - Add new endpoints, services, entities
+
+### 🌐 Make It Live
+
+**Quick Deploy Options:**
+- **Railway**: `railway up` (easiest)
+- **Heroku**: `git push heroku main`
+- **DigitalOcean**: Use App Platform
+- **AWS**: Use Elastic Beanstalk or EC2
+
+**Full Guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+### 📦 What's Included
+
+- ✅ **19 Database Tables** - Complete POS schema
+- ✅ **Multi-tenant Architecture** - Support multiple pharmacies
+- ✅ **JWT Authentication** - Secure token-based auth
+- ✅ **Push Notifications** - Firebase FCM integration
+- ✅ **Payment Gateways** - Stripe & PayFast ready
+- ✅ **Google OAuth** - Social login support
+- ✅ **API Documentation** - Swagger/OpenAPI
+- ✅ **Error Handling** - Global exception filters
+- ✅ **Request Logging** - Full request/response logging
+- ✅ **Validation** - DTO validation with class-validator
+
+### 🔧 How to Add Features
+
+1. **Add New Module:**
+   ```bash
+   # Create module structure
+   src/modules/your-module/
+   ├── controllers/
+   ├── services/
+   ├── dto/
+   └── your-module.module.ts
+   ```
+
+2. **Add Database Entity:**
+   ```bash
+   # Create entity
+   src/database/entities/your-entity.entity.ts
+   # Update schema.sql
+   ```
+
+3. **Register in App Module:**
+   ```typescript
+   // src/app.module.ts
+   imports: [YourModule]
+   ```
+
+**Full Guide:** See [DEVELOPMENT.md](./DEVELOPMENT.md)
+
+## 📝 License
+
+Proprietary - All rights reserved

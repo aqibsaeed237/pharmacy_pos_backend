@@ -1,0 +1,12 @@
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const CurrentStore = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return (
+      request.user?.currentStoreId ||
+      request.headers['x-store-id'] ||
+      request.storeId
+    );
+  },
+);

@@ -1,0 +1,33 @@
+import { Tenant } from './tenant.entity';
+import { Category } from './category.entity';
+import { Store } from './store.entity';
+import { SaleItem } from './sale-item.entity';
+export declare class Product {
+    id: string;
+    name: string;
+    description: string;
+    barcode: string;
+    sku: string;
+    price: number;
+    costPrice: number;
+    categoryId: string;
+    category: Category;
+    imageUrl: string;
+    tenantId: string;
+    tenant: Tenant;
+    storeId: string;
+    store: Store;
+    isActive: boolean;
+    isAddonItem: boolean;
+    availability: string;
+    sort: number;
+    allergyNotes: string;
+    ingredientIds: string[];
+    percentageDiscount: number;
+    productSizes: string[];
+    deliveryRateId: string;
+    riderId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    saleItems: SaleItem[];
+}
