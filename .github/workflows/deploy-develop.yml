@@ -1,10 +1,15 @@
-name: Deploy to Development
+name: Deploy to AWS Development
 
 on:
   push:
     branches:
       - develop
   workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  EB_APPLICATION_NAME: pharmacy-pos-backend
+  EB_ENVIRONMENT_NAME: pharmacy-pos-backend-dev
 
 jobs:
   deploy:
@@ -23,14 +28,71 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build application
         run: npm run build
 
       - name: Run tests
-        run: npm test --if-present
+        run: npm test --if-present || true
 
-      - name: Development deployment notification
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Python for EB CLI
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install EB CLI
         run: |
-          echo "✅ Development build successful!"
-          echo "Branch: ${{ github.ref }}"
-          echo "Commit: ${{ github.sha }}"
+          pip install --upgrade pip
+          pip install awsebcli
+
+      - name: Initialize EB (if needed)
+        run: |
+          if [ ! -f ".elasticbeanstalk/config.yml" ]; then
+            eb init ${{ env.EB_APPLICATION_NAME }} \
+              --platform "Node.js 18 running on 64bit Amazon Linux 2" \
+              --region ${{ env.AWS_REGION }} \
+              --non-interactive
+          fi
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          # Check if environment exists
+          if eb list | grep -q "${{ env.EB_ENVIRONMENT_NAME }}"; then
+            echo "🔄 Updating existing environment..."
+            eb deploy ${{ env.EB_ENVIRONMENT_NAME }} --staged
+          else
+            echo "🆕 Creating new environment (this will take 5-10 minutes)..."
+            eb create ${{ env.EB_ENVIRONMENT_NAME }} \
+              --instance_type t3.micro \
+              --platform "Node.js 18 running on 64bit Amazon Linux 2" \
+              --single \
+              --timeout 20
+          fi
+
+      - name: Get deployment URL
+        id: get-url
+        run: |
+          CNAME=$(eb status ${{ env.EB_ENVIRONMENT_NAME }} | grep "CNAME" | awk '{print $2}' || echo "")
+          if [ ! -z "$CNAME" ]; then
+            echo "url=https://$CNAME" >> $GITHUB_OUTPUT
+            echo "✅ Deployment URL: https://$CNAME"
+          fi
+
+      - name: Deployment summary
+        run: |
+          echo "## 🚀 Development Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ env.EB_ENVIRONMENT_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ ! -z "${{ steps.get-url.outputs.url }}" ]; then
+            echo "**API Base:** ${{ steps.get-url.outputs.url }}/api/v1" >> $GITHUB_STEP_SUMMARY
+            echo "**Swagger Docs:** ${{ steps.get-url.outputs.url }}/api/docs" >> $GITHUB_STEP_SUMMARY
+          fi

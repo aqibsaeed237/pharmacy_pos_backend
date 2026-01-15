@@ -197,21 +197,22 @@ Your database is ready with:
    - See backup script in deployment guide
 
 3. **Production Database**
-   - Use managed database (Railway, Heroku, AWS RDS)
+   - Use AWS RDS MySQL (Free tier available)
    - Setup replication for high availability
    - Configure monitoring
+   - See [AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md) for setup guide
 
 4. **Add New Tables**
    - Create entity in `src/database/entities/`
    - Add SQL to `schema.sql`
    - Run migration or apply SQL
-   - See [DEVELOPMENT.md](./DEVELOPMENT.md)
+   - See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) for development guide
 
 ### 📚 Related Guides
 
 - **[SETUP.md](./SETUP.md)** - Complete setup guide
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Production database setup
-- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - How to add new entities
+- **[AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md)** - Production database setup with AWS RDS
+- **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - How to add new entities
 
 ---
 

@@ -64,7 +64,8 @@ src/
 - **[SETUP.md](./SETUP.md)** - Complete setup guide
 - **[API_GUIDE.md](./API_GUIDE.md)** - API testing and usage
 - **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to Render (Production & Development)
+- **[AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md)** - Deploy to AWS (Free Tier - No Domain Required)
+- **[GITHUB_AWS_SETUP.md](./GITHUB_AWS_SETUP.md)** - GitHub → AWS Auto-Deploy Setup
 - **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Code structure and organization
 - **[WORKFLOW.md](./WORKFLOW.md)** - Three-branch workflow (working → develop → main)
 
@@ -164,9 +165,9 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
    - Stripe/PayFast for payments
 
 3. **Deploy to Production**
-   - See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete guide
-   - Deploy to Render (free, easy, auto-deploy)
-   - Auto-deploys on push to `main` branch
+   - See [AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md) for complete guide
+   - Deploy to AWS Elastic Beanstalk (free tier available)
+   - Get free URL without domain: `your-app.elasticbeanstalk.com`
 
 4. **Workflow**
    - Work on `working` branch for daily development
@@ -176,19 +177,19 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
 
 ### 🌐 Make It Live
 
-**Deploy to Render (Recommended):**
-- **Free tier** (750 hours/month)
-- **Auto-deploy from GitHub**
+**Deploy to AWS (Recommended):**
+- **Free tier** (12 months free, then ~$25/month)
+- **No domain required** - Get free URL: `your-app.elasticbeanstalk.com`
 - **Perfect for NestJS + Swagger**
-- **Two environments:** Development & Production
+- **Easy deployment** with EB CLI
 
 **Quick Start:**
-1. Go to: https://render.com
-2. Sign up with GitHub
-3. Import repository
-4. Configure and deploy!
+1. Install AWS CLI and EB CLI
+2. Configure AWS credentials
+3. Run: `eb init` and `eb create`
+4. Deploy: `eb deploy`
 
-**Full Guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md)
+**Full Guide:** See [AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md)
 
 **Workflow:** Work on `working` branch → Test in `develop` → Deploy from `main` → See [WORKFLOW.md](./WORKFLOW.md)
 
