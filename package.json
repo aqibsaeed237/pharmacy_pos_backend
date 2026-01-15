@@ -29,10 +29,10 @@
     "clean": "rm -rf dist node_modules/.cache",
     "precommit": "npm run lint && npm run format",
     "vercel:dev": "vercel dev",
-    "vercel:deploy:dev": "vercel",
-    "vercel:deploy:prod": "vercel --prod",
-    "vercel:deploy": "vercel",
-    "vercel:prod": "vercel --prod"
+    "vercel:deploy:dev": "vercel --yes",
+    "vercel:deploy:prod": "vercel --prod --yes",
+    "vercel:deploy": "vercel --yes",
+    "vercel:prod": "vercel --prod --yes"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.1.0",
