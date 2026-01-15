@@ -61,8 +61,8 @@ run_ssh "sudo apt update -qq && sudo apt upgrade -y -qq" > /dev/null
 echo -e "${GREEN}   ✅ Done${NC}"
 
 # Install Node.js
-echo -e "${BLUE}🔹 Installing Node.js 18.x...${NC}"
-run_ssh "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - > /dev/null 2>&1 && sudo apt install -y nodejs > /dev/null 2>&1"
+echo -e "${BLUE}🔹 Installing Node.js 20.x...${NC}"
+run_ssh "curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - > /dev/null 2>&1 && sudo apt install -y nodejs > /dev/null 2>&1"
 run_ssh "node --version && npm --version"
 echo -e "${GREEN}   ✅ Done${NC}"
 
@@ -88,7 +88,7 @@ fi
 echo -e "${BLUE}🔹 Setting up repository...${NC}"
 if run_ssh "[ -d ~/pharmacy_pos_backend ]" > /dev/null 2>&1; then
     echo "   Repository exists, updating..."
-    run_ssh "cd ~/pharmacy_pos_backend && git pull origin main || true" > /dev/null
+    run_ssh "cd ~/pharmacy_pos_backend && git stash > /dev/null 2>&1 || true && git pull origin main || true" > /dev/null
 else
     echo "   Cloning repository..."
     run_ssh "git clone $REPO_URL ~/pharmacy_pos_backend > /dev/null 2>&1"
