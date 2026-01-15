@@ -64,7 +64,7 @@ src/
 - **[SETUP.md](./SETUP.md)** - Complete setup guide
 - **[API_GUIDE.md](./API_GUIDE.md)** - API testing and usage
 - **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to production (Vercel/Railway/Render)
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to Render (Production & Development)
 - **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Code structure and organization
 - **[WORKFLOW.md](./WORKFLOW.md)** - Three-branch workflow (working → develop → main)
 
@@ -165,7 +165,7 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
 
 3. **Deploy to Production**
    - See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete guide
-   - Options: Vercel (recommended), Railway, Render
+   - Deploy to Render (free, easy, auto-deploy)
    - Auto-deploys on push to `main` branch
 
 4. **Workflow**
@@ -176,10 +176,17 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
 
 ### 🌐 Make It Live
 
-**Quick Deploy Options:**
-- **Vercel**: Sign up with GitHub, import repo (easiest, free)
-- **Railway**: Connect GitHub, auto-deploy
-- **Render**: Connect GitHub, auto-deploy
+**Deploy to Render (Recommended):**
+- **Free tier** (750 hours/month)
+- **Auto-deploy from GitHub**
+- **Perfect for NestJS + Swagger**
+- **Two environments:** Development & Production
+
+**Quick Start:**
+1. Go to: https://render.com
+2. Sign up with GitHub
+3. Import repository
+4. Configure and deploy!
 
 **Full Guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md)
 

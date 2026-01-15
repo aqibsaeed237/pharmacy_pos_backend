@@ -40,8 +40,5 @@ tmp/
 temp/
 *.tmp
 
-# Railway (removed)
-.railway/
-
 # Render
 .render/

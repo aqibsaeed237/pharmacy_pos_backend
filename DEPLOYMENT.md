@@ -1,198 +1,143 @@
-# 🚀 Deployment Guide
+# 🚀 Render Deployment Guide
 
-## Quick Deploy Options
+## Quick Deploy to Render (Recommended)
 
-### Option 1: Vercel (Recommended - Free, Easy)
+Render is the best platform for deploying NestJS backends with Swagger. It's free, easy, and works perfectly with GitHub auto-deployment.
 
-#### Method A: Using Vercel Dashboard (Easiest)
+---
 
-1. **Go to:** https://vercel.com
-2. **Sign up with GitHub**
-3. **Import project:** Select `aqibsaeed237/pharmacy_pos_backend`
-4. **Configure:**
-   - Framework: Other
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-5. **Add Environment Variables:**
+## 📋 Step-by-Step Setup
+
+### Step 1: Sign Up
+
+1. **Go to:** https://render.com
+2. **Sign up with GitHub** (recommended for auto-deploy)
+3. **Verify your email**
+
+### Step 2: Create Production Service (main branch)
+
+1. **Click:** "New +" → "Web Service"
+2. **Connect GitHub repository:**
+   - Select: `aqibsaeed237/pharmacy_pos_backend`
+   - Branch: `main`
+3. **Configure Service:**
+   - **Name:** `pharmacy-pos-backend-prod` (or any name)
+   - **Environment:** `Node`
+   - **Region:** Choose closest to you
+   - **Branch:** `main`
+   - **Root Directory:** `./` (leave empty)
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm run start:prod`
+   - **Plan:** Free
+4. **Add Environment Variables:**
+   Click "Advanced" → "Add Environment Variable" and add:
    ```
    NODE_ENV=production
-   PORT=3000
-   APP_NAME=Pharmacy POS Backend
-   CORS_ORIGIN=*
+   PORT=10000
    DB_SYNCHRONIZE=false
    DB_LOGGING=false
    JWT_EXPIRES_IN=15m
    JWT_REFRESH_EXPIRES_IN=7d
+   APP_NAME=Pharmacy POS Backend
+   CORS_ORIGIN=*
    ```
-6. **Deploy!**
-
-**Auto-deploys on every push to `main` branch!**
-
-#### Method B: Using Vercel CLI (Command Line)
-
-1. **Install Vercel CLI:**
-   ```bash
-   npm install -g vercel
+   **Also add these (you'll need to set values):**
    ```
-
-2. **Login to Vercel:**
-   ```bash
-   vercel login
+   JWT_SECRET=your-secret-key-here
+   JWT_REFRESH_SECRET=your-refresh-secret-here
+   DB_HOST=your-database-host
+   DB_PORT=3306
+   DB_USERNAME=your-username
+   DB_PASSWORD=your-password
+   DB_DATABASE=pharmacy_pos
    ```
+5. **Click:** "Create Web Service"
 
-3. **Deploy to Development (develop branch):**
-   ```bash
-   git checkout develop
-   npm run vercel:deploy:dev
+### Step 3: Create Development Service (develop branch)
+
+1. **Click:** "New +" → "Web Service"
+2. **Connect GitHub repository:**
+   - Select: `aqibsaeed237/pharmacy_pos_backend`
+   - Branch: `develop`
+3. **Configure Service:**
+   - **Name:** `pharmacy-pos-backend-dev`
+   - **Environment:** `Node`
+   - **Region:** Same as production
+   - **Branch:** `develop`
+   - **Root Directory:** `./`
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm run start:prod`
+   - **Plan:** Free
+4. **Add Environment Variables:**
    ```
-
-4. **Deploy to Production (main branch):**
-   ```bash
-   git checkout main
-   npm run vercel:deploy:prod
+   NODE_ENV=development
+   PORT=10000
+   DB_SYNCHRONIZE=true
+   DB_LOGGING=true
+   JWT_EXPIRES_IN=1h
+   JWT_REFRESH_EXPIRES_IN=7d
+   APP_NAME=Pharmacy POS Backend (Dev)
+   CORS_ORIGIN=*
    ```
-
-5. **Test Locally (with Vercel):**
-   ```bash
-   npm run vercel:dev
-   ```
-
-6. **Add Environment Variables via CLI:**
-
-   **For Development Environment:**
-   ```bash
-   vercel env add NODE_ENV development
-   vercel env add JWT_SECRET your-dev-secret-key
-   # Add all other development variables
-   # Select: Development, Preview, Production (or just Development)
-   ```
-
-   **For Production Environment:**
-   ```bash
-   vercel env add NODE_ENV production
-   vercel env add JWT_SECRET your-prod-secret-key
-   # Add all other production variables
-   # Select: Production only
-   ```
-
-**Available Commands:**
-- `npm run vercel:dev` - Run locally with Vercel
-- `npm run vercel:deploy:dev` - Deploy to development (develop branch)
-- `npm run vercel:deploy:prod` - Deploy to production (main branch)
-- `npm run vercel:deploy` - Deploy to preview (current branch)
-- `npm run vercel:prod` - Deploy to production (main branch)
+   **Also add database and JWT secrets (same as production or different)**
+5. **Click:** "Create Web Service"
 
 ---
 
-## 🌍 Two-Environment Setup (Development & Production)
+## 🔄 Auto-Deploy Setup
 
-### How Vercel Handles Environments:
+After creating services, Render will automatically:
 
-Vercel automatically creates different environments based on your Git branches:
+- ✅ **Deploy from `main` branch** → Production service
+- ✅ **Deploy from `develop` branch** → Development service
+- ✅ **Redeploy on every push** to respective branches
 
-| Branch | Environment | Auto-Deploy | URL |
-|--------|-------------|-------------|-----|
-| `main` | **Production** | ✅ Yes | `your-app.vercel.app` |
-| `develop` | **Preview/Development** | ✅ Yes | `your-app-git-develop.vercel.app` |
-| `working` | Preview | ✅ Yes | `your-app-git-working.vercel.app` |
-
-### Setup Two Environments:
-
-#### 1. Development Environment (develop branch)
-
-**In Vercel Dashboard:**
-1. Go to your project settings
-2. Navigate to **Environment Variables**
-3. Add variables and select **Development** and **Preview** environments
-4. Variables will be used for `develop` branch deployments
-
-**Via CLI:**
-```bash
-# Switch to develop branch
-git checkout develop
-
-# Add environment variables for development
-vercel env add NODE_ENV development
-vercel env add DB_SYNCHRONIZE true
-vercel env add DB_LOGGING true
-vercel env add JWT_EXPIRES_IN 1h
-# When prompted, select: Development, Preview
-
-# Deploy to development
-npm run vercel:deploy:dev
-```
-
-#### 2. Production Environment (main branch)
-
-**In Vercel Dashboard:**
-1. Go to your project settings
-2. Navigate to **Environment Variables**
-3. Add variables and select **Production** environment only
-4. Variables will be used for `main` branch deployments
-
-**Via CLI:**
-```bash
-# Switch to main branch
-git checkout main
-
-# Add environment variables for production
-vercel env add NODE_ENV production
-vercel env add DB_SYNCHRONIZE false
-vercel env add DB_LOGGING false
-vercel env add JWT_EXPIRES_IN 15m
-# When prompted, select: Production
-
-# Deploy to production
-npm run vercel:deploy:prod
-```
-
-### Environment Variables by Environment:
-
-**Development (.env.development):**
-```
-NODE_ENV=development
-DB_SYNCHRONIZE=true
-DB_LOGGING=true
-JWT_EXPIRES_IN=1h
-APP_NAME=Pharmacy POS Backend (Dev)
-```
-
-**Production (.env.production):**
-```
-NODE_ENV=production
-DB_SYNCHRONIZE=false
-DB_LOGGING=false
-JWT_EXPIRES_IN=15m
-APP_NAME=Pharmacy POS Backend
-```
+**No manual deployment needed!** Just push to GitHub and Render handles the rest.
 
 ---
 
-### Option 2: Railway
+## 📍 After Deployment
 
-1. **Go to:** https://railway.app
-2. **Sign up with GitHub**
-3. **New Project** → **Deploy from GitHub repo**
-4. **Select repository**
-5. **Configure:**
-   - Build: `npm install && npm run build`
-   - Start: `npm run start:prod`
-6. **Add environment variables** (same as above)
-7. **Enable Auto-Deploy** from `main` branch
+Your APIs will be available at:
+
+### Production (main branch):
+- **Base URL:** `https://pharmacy-pos-backend-prod.onrender.com/api/v1`
+- **Swagger:** `https://pharmacy-pos-backend-prod.onrender.com/api/docs`
+- **Health:** `https://pharmacy-pos-backend-prod.onrender.com/api/v1/health`
+
+### Development (develop branch):
+- **Base URL:** `https://pharmacy-pos-backend-dev.onrender.com/api/v1`
+- **Swagger:** `https://pharmacy-pos-backend-dev.onrender.com/api/docs`
+- **Health:** `https://pharmacy-pos-backend-dev.onrender.com/api/v1/health`
 
 ---
 
-### Option 3: Render
+## 🔐 Required Environment Variables
 
-1. **Go to:** https://render.com
-2. **Sign up with GitHub**
-3. **New Web Service**
-4. **Connect GitHub repo**
-5. **Configure:**
-   - Build: `npm install && npm run build`
-   - Start: `npm run start:prod`
-6. **Add environment variables**
-7. **Enable Auto-Deploy**
+### For Both Environments:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NODE_ENV` | Environment | `production` or `development` |
+| `PORT` | Server port | `10000` (Render default) |
+| `JWT_SECRET` | JWT signing secret | Generate: `openssl rand -base64 32` |
+| `JWT_REFRESH_SECRET` | Refresh token secret | Generate: `openssl rand -base64 32` |
+| `DB_HOST` | Database host | Your MySQL host |
+| `DB_PORT` | Database port | `3306` |
+| `DB_USERNAME` | Database username | Your username |
+| `DB_PASSWORD` | Database password | Your password |
+| `DB_DATABASE` | Database name | `pharmacy_pos` |
+| `CORS_ORIGIN` | Allowed origins | `*` or specific domain |
+
+### Production-Specific:
+- `DB_SYNCHRONIZE=false`
+- `DB_LOGGING=false`
+- `JWT_EXPIRES_IN=15m`
+
+### Development-Specific:
+- `DB_SYNCHRONIZE=true`
+- `DB_LOGGING=true`
+- `JWT_EXPIRES_IN=1h`
 
 ---
 
@@ -212,7 +157,7 @@ git push origin working
 git checkout develop
 git merge working
 git push origin develop
-# → Test in develop environment
+# → Auto-deploys to development environment!
 ```
 
 ### 3. Deploy to Production (when tested):
@@ -220,53 +165,71 @@ git push origin develop
 git checkout main
 git merge develop
 git push origin main
-# → Auto-deploys to live!
+# → Auto-deploys to production!
 ```
 
 **Workflow:** `working` → `develop` → `main`
 
 ---
 
-## 📍 After Deployment
+## 🛠️ Using render.yaml (Optional)
 
-Your API will be available at:
-- **Base URL:** `https://your-app-url.com/api/v1`
-- **Swagger:** `https://your-app-url.com/api/docs`
-- **Health:** `https://your-app-url.com/api/v1/health`
+If you prefer configuration as code, we've included `render.yaml` in the project. Render will automatically detect and use it.
+
+**Note:** You can still configure everything via the dashboard if you prefer.
 
 ---
 
-## 🔐 Environment Variables
+## 📊 Render Free Tier Limits
 
-### Required for Both Environments:
+- ✅ **750 hours/month** (enough for 24/7 operation)
+- ✅ **512 MB RAM**
+- ✅ **Auto-deploy from GitHub**
+- ✅ **Free SSL/HTTPS**
+- ✅ **Custom domains** (paid plans)
 
-- `NODE_ENV` - `development` or `production`
-- `PORT=3000` (or platform default)
-- `JWT_SECRET` (generate: `openssl rand -base64 32`)
-- `JWT_REFRESH_SECRET` (generate: `openssl rand -base64 32`)
-- Database connection variables (if using external DB)
-
-### Development-Specific:
-- `DB_SYNCHRONIZE=true`
-- `DB_LOGGING=true`
-- `JWT_EXPIRES_IN=1h`
-
-### Production-Specific:
-- `DB_SYNCHRONIZE=false`
-- `DB_LOGGING=false`
-- `JWT_EXPIRES_IN=15m`
+**For most projects, the free tier is sufficient!**
 
 ---
 
 ## ✅ Deployment Checklist
 
-- [ ] Code pushed to GitHub
+- [ ] Render account created
+- [ ] Production service created (main branch)
+- [ ] Development service created (develop branch)
 - [ ] Environment variables configured
-- [ ] Database setup (if needed)
-- [ ] Auto-deploy enabled
+- [ ] Database connection set up
+- [ ] First deployment successful
 - [ ] Test health endpoint
 - [ ] Test Swagger docs
-- [ ] Share API URL with frontend
+- [ ] Share API URLs with frontend team
+
+---
+
+## 🐛 Troubleshooting
+
+### Service won't start:
+- Check logs in Render dashboard
+- Verify environment variables are set
+- Ensure database is accessible
+
+### Build fails:
+- Check Node.js version (should be 20.x)
+- Verify all dependencies in `package.json`
+- Check build logs in Render dashboard
+
+### Database connection fails:
+- Verify database credentials
+- Check database host allows Render IPs
+- Ensure database is running
+
+---
+
+## 📚 Additional Resources
+
+- **Render Docs:** https://render.com/docs
+- **Render Dashboard:** https://dashboard.render.com
+- **Support:** https://render.com/docs/support
 
 ---
 
