@@ -4,6 +4,8 @@
 
 ### Option 1: Vercel (Recommended - Free, Easy)
 
+#### Method A: Using Vercel Dashboard (Easiest)
+
 1. **Go to:** https://vercel.com
 2. **Sign up with GitHub**
 3. **Import project:** Select `aqibsaeed237/pharmacy_pos_backend`
@@ -25,6 +27,45 @@
 6. **Deploy!**
 
 **Auto-deploys on every push to `main` branch!**
+
+#### Method B: Using Vercel CLI (Command Line)
+
+1. **Install Vercel CLI:**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel:**
+   ```bash
+   vercel login
+   ```
+
+3. **Deploy to Preview:**
+   ```bash
+   npm run vercel:deploy
+   ```
+
+4. **Deploy to Production:**
+   ```bash
+   npm run vercel:prod
+   ```
+
+5. **Test Locally (with Vercel):**
+   ```bash
+   npm run vercel:dev
+   ```
+
+6. **Add Environment Variables via CLI:**
+   ```bash
+   vercel env add NODE_ENV production
+   vercel env add JWT_SECRET your-secret-key
+   # Add all other environment variables
+   ```
+
+**Available Commands:**
+- `npm run vercel:dev` - Run locally with Vercel
+- `npm run vercel:deploy` - Deploy to preview
+- `npm run vercel:prod` - Deploy to production
 
 ---
 
