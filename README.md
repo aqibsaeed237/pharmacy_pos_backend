@@ -27,8 +27,10 @@ npm run start:dev
 ```
 
 **Access:**
-- API: http://localhost:3000/api/v1
-- Swagger: http://localhost:3000/api/docs
+- **Local API:** http://localhost:3000/api/v1
+- **Local Swagger:** http://localhost:3000/api/docs
+- **Production API:** https://pharmacy-pos-backend-prod.eba-wdg27kyw.us-east-1.elasticbeanstalk.com/api/v1
+- **Production Swagger:** https://pharmacy-pos-backend-prod.eba-wdg27kyw.us-east-1.elasticbeanstalk.com/api/docs
 
 ## ✨ Features
 
@@ -61,6 +63,8 @@ src/
 
 ## 📚 Documentation
 
+- **[DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)** - Complete developer guide (architecture, installation, commands)
+- **[DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)** - ⭐ Complete developer guide (architecture, installation, commands, deployment)
 - **[SETUP.md](./SETUP.md)** - Complete setup guide
 - **[API_GUIDE.md](./API_GUIDE.md)** - API testing and usage
 - **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
