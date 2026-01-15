@@ -28,14 +28,6 @@ jobs:
             # Build project
             npm run build
             
-            # Setup MySQL and database if needed (first time only)
-            if [ ! -f ~/.pharmacy_db_creds ]; then
-              echo "Setting up MySQL and database..."
-              chmod +x scripts/*.sh 2>/dev/null || true
-              bash scripts/setup-mysql-ec2.sh || echo "MySQL setup skipped"
-              bash scripts/update-env-db.sh ${{ secrets.APP_PATH }} ~/.pharmacy_db_creds || echo "Env update skipped"
-            fi
-            
             # Restart PM2 application
             pm2 restart pharmacy-api || pm2 start dist/main.js --name pharmacy-api
             pm2 save
