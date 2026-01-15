@@ -56,22 +56,34 @@
 
 ---
 
-## 🔄 Branch Workflow
+## 🔄 Three-Branch Workflow
 
-### Development:
+### 1. Daily Development (working branch):
 ```bash
-git checkout develop
-# Make changes
-git push origin develop
+git checkout working
+# Make your changes
+git add .
+git commit -m "Add feature"
+git push origin working
 ```
 
-### Deploy to Production:
+### 2. Test in Develop (when ready):
+```bash
+git checkout develop
+git merge working
+git push origin develop
+# → Test in develop environment
+```
+
+### 3. Deploy to Production (when tested):
 ```bash
 git checkout main
 git merge develop
 git push origin main
 # → Auto-deploys to live!
 ```
+
+**Workflow:** `working` → `develop` → `main`
 
 ---
 

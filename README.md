@@ -62,13 +62,12 @@ src/
 ## 📚 Documentation
 
 - **[SETUP.md](./SETUP.md)** - Complete setup guide
-- **[API_GUIDE.md](./API_GUIDE.md)** - API testing with Postman
+- **[API_GUIDE.md](./API_GUIDE.md)** - API testing and usage
 - **[DATABASE.md](./DATABASE.md)** - Database setup and SQL files
-- **[PHPMYADMIN_GUIDE.md](./PHPMYADMIN_GUIDE.md)** - phpMyAdmin setup & usage
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to production & make it live
-- **[FIREBASE_HOSTING_GUIDE.md](./FIREBASE_HOSTING_GUIDE.md)** - Firebase services & free hosting options
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deploy to production (Vercel/Railway/Render)
 - **[DEVELOPMENT.md](./DEVELOPMENT.md)** - How to add new features & modules
-- **[INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)** - Firebase, Google OAuth, Payments setup
+- **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Code structure and organization
+- **[WORKFLOW.md](./WORKFLOW.md)** - Three-branch workflow (working → develop → main)
 
 ## 🔧 Available Commands
 
@@ -164,28 +163,28 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
    - Firebase for push notifications
    - Google OAuth for social login
    - Stripe/PayFast for payments
-   - See [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)
 
 3. **Deploy to Production**
    - See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete guide
-   - Options: AWS, DigitalOcean, Heroku, Railway, etc.
-   - Link your domain
-   - Setup SSL/HTTPS
+   - Options: Vercel (recommended), Railway, Render
+   - Auto-deploys on push to `main` branch
 
-4. **Add New Features**
-   - See [DEVELOPMENT.md](./DEVELOPMENT.md) for how to add modules
-   - Follow the module structure
-   - Add new endpoints, services, entities
+4. **Workflow**
+   - Work on `working` branch for daily development
+   - Merge to `develop` for testing
+   - Merge to `main` for production deployment
+   - See [WORKFLOW.md](./WORKFLOW.md) for details
 
 ### 🌐 Make It Live
 
 **Quick Deploy Options:**
-- **Railway**: `railway up` (easiest)
-- **Heroku**: `git push heroku main`
-- **DigitalOcean**: Use App Platform
-- **AWS**: Use Elastic Beanstalk or EC2
+- **Vercel**: Sign up with GitHub, import repo (easiest, free)
+- **Railway**: Connect GitHub, auto-deploy
+- **Render**: Connect GitHub, auto-deploy
 
 **Full Guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+**Workflow:** Work on `working` branch → Test in `develop` → Deploy from `main` → See [WORKFLOW.md](./WORKFLOW.md)
 
 ### 📦 What's Included
 
@@ -202,7 +201,13 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
 
 ### 🔧 How to Add Features
 
-1. **Add New Module:**
+1. **Work on `working` branch:**
+   ```bash
+   git checkout working
+   # Make your changes
+   ```
+
+2. **Add New Module:**
    ```bash
    # Create module structure
    src/modules/your-module/
@@ -212,21 +217,34 @@ Interactive Swagger docs available at: http://localhost:3000/api/docs
    └── your-module.module.ts
    ```
 
-2. **Add Database Entity:**
+3. **Add Database Entity:**
    ```bash
    # Create entity
    src/database/entities/your-entity.entity.ts
    # Update schema.sql
    ```
 
-3. **Register in App Module:**
+4. **Register in App Module:**
    ```typescript
    // src/app.module.ts
    imports: [YourModule]
    ```
 
-**Full Guide:** See [DEVELOPMENT.md](./DEVELOPMENT.md)
+5. **Test and Deploy:**
+   ```bash
+   # Merge to develop for testing
+   git checkout develop
+   git merge working
+   
+   # Merge to main for production
+   git checkout main
+   git merge develop
+   ```
+
+**Workflow Guide:** See [WORKFLOW.md](./WORKFLOW.md)
 
 ## 📝 License
 
-Proprietary - All rights reserved
+**Proprietary License** - View only. No download, modification, or distribution without permission.
+
+See [LICENSE](./LICENSE) for details.
