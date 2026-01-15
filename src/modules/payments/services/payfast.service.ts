@@ -52,7 +52,11 @@ export class PayFastService implements OnModuleInit {
     [key: string]: any;
   }): string {
     if (!this.merchantId || !this.merchantKey) {
-      throw new Error('PayFast is not initialized');
+      throw new Error('PayFast is not initialized. Please configure PAYFAST_MERCHANT_ID and PAYFAST_MERCHANT_KEY');
+    }
+
+    if (!this.passphrase) {
+      throw new Error('PayFast passphrase is required. Please configure PAYFAST_PASSPHRASE');
     }
 
     const { merchantId, merchantKey, amount, itemName, returnUrl, cancelUrl, notifyUrl, ...otherParams } = params;
@@ -70,10 +74,13 @@ export class PayFastService implements OnModuleInit {
       ),
     };
 
-    // Remove empty values
-    Object.keys(paymentData).forEach(
-      (key) => !paymentData[key] && delete paymentData[key],
-    );
+    // Remove empty values and null/undefined values
+    Object.keys(paymentData).forEach((key) => {
+      const value = paymentData[key];
+      if (!value && value !== '0' && value !== 0) {
+        delete paymentData[key];
+      }
+    });
 
     // Generate signature
     const signature = this.generateSignature(paymentData);

@@ -1,0 +1,44 @@
+name: Deploy Backend to AWS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ secrets.APP_PATH }}
+            git pull origin main
+            
+            # Install dependencies
+            npm ci --production=false
+            
+            # Build project
+            npm run build
+            
+            # Setup MySQL and database if needed (first time only)
+            if [ ! -f ~/.pharmacy_db_creds ]; then
+              echo "Setting up MySQL and database..."
+              chmod +x scripts/*.sh 2>/dev/null || true
+              bash scripts/setup-mysql-ec2.sh || echo "MySQL setup skipped"
+              bash scripts/update-env-db.sh ${{ secrets.APP_PATH }} ~/.pharmacy_db_creds || echo "Env update skipped"
+            fi
+            
+            # Restart PM2 application
+            pm2 restart pharmacy-api || pm2 start dist/main.js --name pharmacy-api
+            pm2 save
+            
+            # Show status
+            pm2 status
