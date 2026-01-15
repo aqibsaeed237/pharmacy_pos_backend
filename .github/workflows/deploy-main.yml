@@ -59,7 +59,7 @@ jobs:
             cat > .elasticbeanstalk/config.yml << EOF
           global:
             application_name: ${{ env.EB_APPLICATION_NAME }}
-            default_platform: "64bit Amazon Linux 2 v5.8.0 running Node.js 18"
+            default_platform: Node.js
             default_region: ${{ env.AWS_REGION }}
           EOF
             echo "EB config created"
@@ -67,22 +67,19 @@ jobs:
             echo "EB already initialized"
           fi
 
-      - name: List available platforms
-        run: |
-          echo "Available platforms:"
-          eb platform list || true
-
       - name: Deploy to Elastic Beanstalk
         run: |
           # Check if environment exists
-          if eb list | grep -q "${{ env.EB_ENVIRONMENT_NAME }}"; then
+          if eb list --region ${{ env.AWS_REGION }} | grep -q "${{ env.EB_ENVIRONMENT_NAME }}"; then
             echo "🔄 Updating existing environment..."
             eb deploy ${{ env.EB_ENVIRONMENT_NAME }} --staged
           else
             echo "🆕 Creating new environment (this will take 5-10 minutes)..."
+            # Use --platform without version to let EB auto-select latest
             eb create ${{ env.EB_ENVIRONMENT_NAME }} \
               --instance_type t3.micro \
-              --platform "64bit Amazon Linux 2 v5.8.0 running Node.js 18" \
+              --platform "Node.js" \
+              --region ${{ env.AWS_REGION }} \
               --single \
               --timeout 20
           fi
