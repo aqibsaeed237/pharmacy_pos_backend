@@ -29,6 +29,8 @@
     "clean": "rm -rf dist node_modules/.cache",
     "precommit": "npm run lint && npm run format",
     "vercel:dev": "vercel dev",
+    "vercel:deploy:dev": "vercel --env NODE_ENV=development",
+    "vercel:deploy:prod": "vercel --prod --env NODE_ENV=production",
     "vercel:deploy": "vercel",
     "vercel:prod": "vercel --prod"
   },

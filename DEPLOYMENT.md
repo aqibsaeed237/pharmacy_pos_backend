@@ -40,14 +40,16 @@
    vercel login
    ```
 
-3. **Deploy to Preview:**
+3. **Deploy to Development (develop branch):**
    ```bash
-   npm run vercel:deploy
+   git checkout develop
+   npm run vercel:deploy:dev
    ```
 
-4. **Deploy to Production:**
+4. **Deploy to Production (main branch):**
    ```bash
-   npm run vercel:prod
+   git checkout main
+   npm run vercel:deploy:prod
    ```
 
 5. **Test Locally (with Vercel):**
@@ -56,16 +58,113 @@
    ```
 
 6. **Add Environment Variables via CLI:**
+
+   **For Development Environment:**
+   ```bash
+   vercel env add NODE_ENV development
+   vercel env add JWT_SECRET your-dev-secret-key
+   # Add all other development variables
+   # Select: Development, Preview, Production (or just Development)
+   ```
+
+   **For Production Environment:**
    ```bash
    vercel env add NODE_ENV production
-   vercel env add JWT_SECRET your-secret-key
-   # Add all other environment variables
+   vercel env add JWT_SECRET your-prod-secret-key
+   # Add all other production variables
+   # Select: Production only
    ```
 
 **Available Commands:**
 - `npm run vercel:dev` - Run locally with Vercel
-- `npm run vercel:deploy` - Deploy to preview
-- `npm run vercel:prod` - Deploy to production
+- `npm run vercel:deploy:dev` - Deploy to development (develop branch)
+- `npm run vercel:deploy:prod` - Deploy to production (main branch)
+- `npm run vercel:deploy` - Deploy to preview (current branch)
+- `npm run vercel:prod` - Deploy to production (main branch)
+
+---
+
+## 🌍 Two-Environment Setup (Development & Production)
+
+### How Vercel Handles Environments:
+
+Vercel automatically creates different environments based on your Git branches:
+
+| Branch | Environment | Auto-Deploy | URL |
+|--------|-------------|-------------|-----|
+| `main` | **Production** | ✅ Yes | `your-app.vercel.app` |
+| `develop` | **Preview/Development** | ✅ Yes | `your-app-git-develop.vercel.app` |
+| `working` | Preview | ✅ Yes | `your-app-git-working.vercel.app` |
+
+### Setup Two Environments:
+
+#### 1. Development Environment (develop branch)
+
+**In Vercel Dashboard:**
+1. Go to your project settings
+2. Navigate to **Environment Variables**
+3. Add variables and select **Development** and **Preview** environments
+4. Variables will be used for `develop` branch deployments
+
+**Via CLI:**
+```bash
+# Switch to develop branch
+git checkout develop
+
+# Add environment variables for development
+vercel env add NODE_ENV development
+vercel env add DB_SYNCHRONIZE true
+vercel env add DB_LOGGING true
+vercel env add JWT_EXPIRES_IN 1h
+# When prompted, select: Development, Preview
+
+# Deploy to development
+npm run vercel:deploy:dev
+```
+
+#### 2. Production Environment (main branch)
+
+**In Vercel Dashboard:**
+1. Go to your project settings
+2. Navigate to **Environment Variables**
+3. Add variables and select **Production** environment only
+4. Variables will be used for `main` branch deployments
+
+**Via CLI:**
+```bash
+# Switch to main branch
+git checkout main
+
+# Add environment variables for production
+vercel env add NODE_ENV production
+vercel env add DB_SYNCHRONIZE false
+vercel env add DB_LOGGING false
+vercel env add JWT_EXPIRES_IN 15m
+# When prompted, select: Production
+
+# Deploy to production
+npm run vercel:deploy:prod
+```
+
+### Environment Variables by Environment:
+
+**Development (.env.development):**
+```
+NODE_ENV=development
+DB_SYNCHRONIZE=true
+DB_LOGGING=true
+JWT_EXPIRES_IN=1h
+APP_NAME=Pharmacy POS Backend (Dev)
+```
+
+**Production (.env.production):**
+```
+NODE_ENV=production
+DB_SYNCHRONIZE=false
+DB_LOGGING=false
+JWT_EXPIRES_IN=15m
+APP_NAME=Pharmacy POS Backend
+```
 
 ---
 
@@ -139,12 +238,23 @@ Your API will be available at:
 
 ## 🔐 Environment Variables
 
-Required for production:
-- `NODE_ENV=production`
+### Required for Both Environments:
+
+- `NODE_ENV` - `development` or `production`
 - `PORT=3000` (or platform default)
 - `JWT_SECRET` (generate: `openssl rand -base64 32`)
 - `JWT_REFRESH_SECRET` (generate: `openssl rand -base64 32`)
 - Database connection variables (if using external DB)
+
+### Development-Specific:
+- `DB_SYNCHRONIZE=true`
+- `DB_LOGGING=true`
+- `JWT_EXPIRES_IN=1h`
+
+### Production-Specific:
+- `DB_SYNCHRONIZE=false`
+- `DB_LOGGING=false`
+- `JWT_EXPIRES_IN=15m`
 
 ---
 
