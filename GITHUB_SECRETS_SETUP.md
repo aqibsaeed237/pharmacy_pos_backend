@@ -166,14 +166,35 @@ ssh -i ~/path/to/key.pem ubuntu@YOUR_EC2_IP
 # Exit: type 'exit'
 ```
 
-### Deployment Fails with "Cannot Connect"
+### Deployment Fails with "Cannot Connect" or "Connection Reset by Peer"
 
-**Issue:** Security group doesn't allow SSH.
+**Issue:** Security group doesn't allow SSH from GitHub Actions runners.
+
+**Symptoms:**
+- `ssh: handshake failed: read tcp ... connection reset by peer`
+- `Cannot connect to host`
+- `Connection timeout`
 
 **Solution:**
 1. AWS Console → EC2 → Security Groups
-2. Edit inbound rules
-3. Add rule: SSH (port 22) from `0.0.0.0/0` or your IP
+2. Select your instance's security group
+3. Edit inbound rules
+4. Add/update SSH rule:
+   - **Type:** SSH
+   - **Port:** 22
+   - **Source:** `0.0.0.0/0` (This allows SSH from any IP, including GitHub Actions)
+   - **Description:** SSH from GitHub Actions
+5. Click **Save rules**
+
+**Why this happens:**
+- GitHub Actions runners use dynamic IP addresses
+- Security groups need to allow SSH from any IP (`0.0.0.0/0`) for automated deployments
+- If you set it to "My IP" only, GitHub Actions can't connect
+
+**Security Note:**
+- Allowing `0.0.0.0/0` for SSH is common for GitHub Actions
+- Your SSH key still protects access (no one can connect without the private key)
+- For extra security, restrict to GitHub's IP ranges (though they change frequently)
 
 ### Application Not Starting
 
