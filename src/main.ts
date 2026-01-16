@@ -15,8 +15,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  // Security
-  app.use(helmet());
+  // Security - Configure Helmet to work with HTTP and Swagger
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // Disable CSP for Swagger UI compatibility
+      crossOriginOpenerPolicy: false, // Disable COOP for HTTP compatibility
+      crossOriginResourcePolicy: false, // Allow Swagger assets to load
+    }),
+  );
   app.use(compression());
 
   // CORS
@@ -68,7 +74,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/docs', app, document, {
+    customSiteTitle: 'Pharmacy POS API',
+    customCss: '.swagger-ui .topbar { display: none }',
+    customfavIcon: '/favicon.ico',
+  });
 
   const port = process.env.PORT || configService.get<number>('app.port') || 3000;
   await app.listen(port);
