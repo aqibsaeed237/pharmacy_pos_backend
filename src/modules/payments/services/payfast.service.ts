@@ -77,7 +77,7 @@ export class PayFastService implements OnModuleInit {
     // Remove empty values and null/undefined values
     Object.keys(paymentData).forEach((key) => {
       const value = paymentData[key];
-      if (!value && value !== '0' && value !== 0) {
+      if (!value && value !== '0' && (value as any) !== 0) {
         delete paymentData[key];
       }
     });
